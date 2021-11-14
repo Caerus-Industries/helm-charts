@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "duoauthproxy-radius-simple.fullname" . }}
+  labels:
+    {{- include "duoauthproxy-radius-simple.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "duoauthproxy-radius-simple.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "duoauthproxy-radius-simple.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: radius
+              containerPort: 1812
+              protocol: UDP
+          volumeMounts:
+          - name: config-volume
+            mountPath: /var/duoauthproxy
+          - name: duo-secret-volume
+            mountPath: /var/duo-secret
+          - name: radius-secret-volume
+            mountPath: /var/radius-secret
+          lifecycle:
+            postStart:
+              exec:
+                # This looks kind of gross, but it replaces the Duo IKEY/SKEY and RADIUS allowed IP range and secret into the template configmap, then outputs the result to the path the Duo Authentication Proxy expects
+                command: ['/bin/bash', '-c', 'sed "s/<duo_ikey>/$(cat /var/duo-secret/username)/g; s/<duo_skey>/$(cat /var/duo-secret/password)/g; s/<radius_ip>/$(cat /var/radius-secret/username)/g; s/<radius_secret>/$(cat /var/radius-secret/password)/g;" /var/duoauthproxy/authproxy.cfg > /opt/duoauthproxy/conf/authproxy.cfg']
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: config-volume
+          configMap:
+            name: duo-config
+        - name: duo-secret-volume
+          secret:
+            secretName: duo
+        - name: radius-secret-volume
+          secret:
+            secretName: radius
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
