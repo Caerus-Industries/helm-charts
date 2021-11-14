@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  duoauthproxy-radius-simple:
+  - apiVersion: v2
+    appVersion: 5.5.0
+    created: "2021-11-14T00:46:36.697471902Z"
+    description: A Helm chart to deploy Duo's authentication proxy as a simple Duo-only RADIUS server
+    digest: ab32979604f4a7cd0212df4c0df9c648413c43d1095737f8ffeb118919c61d2b
+    name: duoauthproxy-radius-simple
+    type: application
+    urls:
+    - https://github.com/ethanbergstrom/helm-charts/releases/download/duoauthproxy-radius-simple-0.1.0/duoauthproxy-radius-simple-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-11-14T00:46:36.460174022Z"
