@@ -2,5 +2,6 @@ apiVersion: v2
 name: duoauthproxy-radius-simple
 description: A Helm chart to deploy Duo's authentication proxy as a simple Duo-only RADIUS server
 type: application
+icon: https://duo.com/assets/img/duoLogo-web.png
 version: 0.1.0
 appVersion: "5.5.0"
