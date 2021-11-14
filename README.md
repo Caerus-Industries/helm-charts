@@ -6,7 +6,7 @@ Once Helm has been set up correctly, add the repo as follows:
 
     helm repo add caerus https://caerus-industries.github.io/helm-charts
 
-If you had already added this repo earlier, run `helm repo update` to retrieve the latest versions of the packages.  You can then run `helm search repo ethanbergstrom` to see the charts.
+If you had already added this repo earlier, run `helm repo update` to retrieve the latest versions of the packages. You can then run `helm search repo caerus` to see the charts.
 
 To install the duoauthproxy-radius-simple chart:
 
