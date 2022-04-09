@@ -1,0 +1,7 @@
+apiVersion: v2
+name: duoauthproxy-radius-iframe-netscaler-rfwebfui
+description: A Helm chart to deploy Duo's authentication proxy as a simple Duo-only RADIUS server with Citrix ADC nFactor integration support
+type: application
+icon: https://duo.com/assets/img/duoLogo-web.png
+version: 0.1.0
+appVersion: "5.6.1"

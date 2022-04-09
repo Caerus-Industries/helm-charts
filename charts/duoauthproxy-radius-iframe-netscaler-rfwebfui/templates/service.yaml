@@ -6,11 +6,10 @@ metadata:
     {{- include "duoauthproxy-radius-simple.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
-  externalTrafficPolicy: Local
-  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: radius
+      nodePort: {{ .Values.service.port }}
       protocol: UDP
       name: radius
   selector:

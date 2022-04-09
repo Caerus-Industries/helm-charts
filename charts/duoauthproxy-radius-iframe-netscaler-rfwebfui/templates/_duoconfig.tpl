@@ -6,7 +6,11 @@ Duo Authentication Proxy Duo-Only Radius Server Configuration Template
 debug={{ .Values.duo.debug }}
 log_stdout=true
 
-[radius_server_duo_only]
+[duo_only_client]
+
+[radius_server_iframe]
+type=citrix_netscaler_rfwebui
+client=duo_only_client
 ikey=<duo_ikey>
 skey=<duo_skey>
 api_host={{ .Values.duo.apiHost }}
@@ -14,3 +18,5 @@ radius_ip_1=<radius_ip>
 radius_secret_1=<radius_secret>
 failmode={{ .Values.duo.failmode }}
 {{- end }}
+
+
